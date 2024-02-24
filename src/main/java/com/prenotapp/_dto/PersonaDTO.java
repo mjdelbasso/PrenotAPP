@@ -16,6 +16,6 @@ public class PersonaDTO {
 
   @NotNull
   private String phone;
-
+  
   private String email;
 }

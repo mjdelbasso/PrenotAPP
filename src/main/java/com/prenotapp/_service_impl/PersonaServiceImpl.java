@@ -1,10 +1,11 @@
 package com.prenotapp._service_impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.prenotapp._model.Persona;
 import com.prenotapp._repo.IPersonaRepo;
 import com.prenotapp._service.IPersonaService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class PersonaServiceImpl

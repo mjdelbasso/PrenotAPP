@@ -1,7 +1,8 @@
 package com.prenotapp._repo;
 
-import com.prenotapp._model.Shop;
 import org.springframework.stereotype.Repository;
+
+import com.prenotapp._model.Shop;
 
 @Repository
 public interface IShopRepo extends IGenericRepo<Shop, Integer> {

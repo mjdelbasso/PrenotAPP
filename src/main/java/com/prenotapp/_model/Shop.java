@@ -1,10 +1,17 @@
 package com.prenotapp._model;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Data;
 
-import jakarta.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @Entity
@@ -42,7 +49,6 @@ public class Shop {
     @Column(name = "country", nullable = false, length = 100)
     private String country;
 
-   /*
-   @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<ShopCategory> shopCategories = new HashSet<>(); */ 
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Category> categories;
 }

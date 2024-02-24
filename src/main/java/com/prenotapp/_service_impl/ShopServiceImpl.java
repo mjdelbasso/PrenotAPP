@@ -1,10 +1,15 @@
 package com.prenotapp._service_impl;
 
-import com.prenotapp._model.Shop;
-import com.prenotapp._repo.IShopRepo;
-import com.prenotapp._service.IShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.prenotapp._model.Shop;
+import com.prenotapp._repo.IGenericRepo;
+import com.prenotapp._repo.IShopRepo;
+import com.prenotapp._service.IShopService;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 @Service
 public class ShopServiceImpl
@@ -12,10 +17,13 @@ public class ShopServiceImpl
   implements IShopService {
 
   @Autowired
-  private IShopRepo repo;
+  private IShopRepo shopRepo;
 
   @Override
-  protected IShopRepo getRepo() {
-    return repo;
+  protected IGenericRepo<Shop, Integer> getRepo() {
+    return shopRepo;
   }
+
+  @PersistenceContext
+  private EntityManager entityManager;
 }
