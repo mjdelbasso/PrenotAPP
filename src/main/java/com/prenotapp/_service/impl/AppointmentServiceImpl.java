@@ -55,10 +55,12 @@ public class AppointmentServiceImpl
 
   private AppointmentDetailsDTO convertToDTO(Appointment appointment) {
     AppointmentDetailsDTO dto = new AppointmentDetailsDTO();
-    dto.setAppointmentId(appointment.getId());
+    dto.setId(appointment.getId());
 
     dto.setDate(
-      appointment.getDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+      appointment
+        .getDate()
+        .format(DateTimeFormatter.ofPattern("dd-MM-yyyy, HH:mm"))
     );
 
     Shop shop = appointment.getShop();

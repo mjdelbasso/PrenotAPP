@@ -1,8 +1,12 @@
 package com.prenotapp._controller;
 
+import com.prenotapp._dto.AppointmentDTO;
+import com.prenotapp._dto.AppointmentDetailsDTO;
+import com.prenotapp._model.Appointment;
+import com.prenotapp._service.IAppointmentService;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,13 +19,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.prenotapp._dto.AppointmentDTO;
-import com.prenotapp._dto.AppointmentDetailsDTO;
-import com.prenotapp._model.Appointment;
-import com.prenotapp._service.IAppointmentService;
-
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/appointments")
@@ -64,12 +61,21 @@ public class AppointmentController {
   }
 
   @PutMapping("/update")
-  public ResponseEntity<Appointment> update(
+  public ResponseEntity<AppointmentDetailsDTO> update(
     @Valid @RequestBody AppointmentDTO appointmentDTO
   ) throws Exception {
     Appointment appointment = mapper.map(appointmentDTO, Appointment.class);
-    Appointment updatedAppointment = service.update(appointment);
-    return new ResponseEntity<>(updatedAppointment, HttpStatus.OK);
+
+    if (service.AppointmentAlredyExist(appointment)) {
+      return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
+
+    appointment = service.update(appointment);
+    appointmentDTO = mapper.map(appointment, AppointmentDTO.class);
+    AppointmentDetailsDTO appointmentDetailsDTO = service.findAppointmentById(
+      appointmentDTO.getId()
+    );
+    return new ResponseEntity<>(appointmentDetailsDTO, HttpStatus.OK);
   }
 
   @DeleteMapping("/delete/{id}")

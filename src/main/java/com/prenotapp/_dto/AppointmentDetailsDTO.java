@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class AppointmentDetailsDTO {
 
-  private Integer appointmentId;
+  private Integer id;
   private String date;
   private ShopDetailsDTO shopDetails;
   private PersonaDetailsDTO personaDetails;
