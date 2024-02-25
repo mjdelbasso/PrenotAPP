@@ -1,21 +1,14 @@
 package com.prenotapp._dto;
 
-import jakarta.validation.constraints.NotNull;
 import java.util.List;
+
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class ShopDTO {
 
   private Integer id;
-
-  private String website;
-
-  private String email;
-
-  private String description;
-
-  private List<CategoryDTO> categories;
 
   @NotNull
   private String shopName;
@@ -34,4 +27,12 @@ public class ShopDTO {
 
   @NotNull
   private String country;
+
+  private String website;
+
+  private String email;
+
+  private String description;
+
+  private List<CategoryDTO> categories;
 }

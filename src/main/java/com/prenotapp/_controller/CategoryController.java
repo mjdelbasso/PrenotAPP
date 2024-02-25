@@ -1,13 +1,10 @@
 package com.prenotapp._controller;
 
-import com.prenotapp._dto.CategoryDTO;
-import com.prenotapp._model.Category;
-import com.prenotapp._service.ICategoryService;
-import com.prenotapp.exception.ModelNotFoundException;
-import jakarta.validation.Valid;
 import java.net.URI;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +16,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.prenotapp._dto.CategoryDTO;
+import com.prenotapp._model.Category;
+import com.prenotapp._service.ICategoryService;
+import com.prenotapp.exception.ModelNotFoundException;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/categories")
@@ -36,6 +40,7 @@ public class CategoryController {
       .list()
       .stream()
       .map(category -> mapper.map(category, CategoryDTO.class))
+      .sorted(Comparator.comparing(CategoryDTO::getId))
       .collect(Collectors.toList());
     return new ResponseEntity<>(list, HttpStatus.OK);
   }

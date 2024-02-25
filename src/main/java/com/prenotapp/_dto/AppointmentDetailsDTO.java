@@ -14,6 +14,7 @@ public class AppointmentDetailsDTO {
   @Data
   @AllArgsConstructor
   public static class ShopDetailsDTO {
+
     private Integer shopId;
     private String shopName;
     private String address;
@@ -24,6 +25,7 @@ public class AppointmentDetailsDTO {
   @Data
   @AllArgsConstructor
   public static class PersonaDetailsDTO {
+
     private Integer personaId;
     private String personaFirstName;
     private String personaLastName;

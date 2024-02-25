@@ -5,5 +5,4 @@ import org.springframework.stereotype.Repository;
 import com.prenotapp._model.Shop;
 
 @Repository
-public interface IShopRepo extends IGenericRepo<Shop, Integer> {
-}
+public interface IShopRepo extends IGenericRepo<Shop, Integer> {}

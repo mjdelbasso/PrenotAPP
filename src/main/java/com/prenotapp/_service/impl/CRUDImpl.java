@@ -1,9 +1,8 @@
 package com.prenotapp._service.impl;
 
-import java.util.List;
-
 import com.prenotapp._repo.IGenericRepo;
 import com.prenotapp._service.ICRUD;
+import java.util.List;
 
 @SuppressWarnings("null")
 public abstract class CRUDImpl<T, ID> implements ICRUD<T, ID> {

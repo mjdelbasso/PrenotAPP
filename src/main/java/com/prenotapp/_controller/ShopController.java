@@ -3,6 +3,7 @@ package com.prenotapp._controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,6 +43,7 @@ public class ShopController {
     List<ShopDTO> lstShopDTO = lstShop
       .stream()
       .map(s -> mapper.map(s, ShopDTO.class))
+      .sorted(Comparator.comparing(ShopDTO::getId))
       .collect(Collectors.toList());
     return new ResponseEntity<>(lstShopDTO, HttpStatus.OK);
   }
@@ -95,5 +97,18 @@ public class ShopController {
     WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).list());
     model.add(linkTo.withRel("all-shops"));
     return model;
+  }
+
+  @PostMapping("/{shopId}/categories/{categoryId}")
+  public ResponseEntity<Void> addCategorytoShop(
+    @PathVariable("shopId") Integer shopId,
+    @PathVariable("categoryId") Integer categoryId
+  ) {
+    try {
+      service.addCategorytoShop(shopId, categoryId);
+      return new ResponseEntity<>(HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }
