@@ -8,6 +8,8 @@ public class PersonaDTO {
 
   private Integer id;
 
+  private String email;
+
   @NotNull
   private String firstName;
 
@@ -16,6 +18,4 @@ public class PersonaDTO {
 
   @NotNull
   private String phone;
-  
-  private String email;
 }
