@@ -1,16 +1,16 @@
 package com.prenotapp._service.impl;
 
+import com.prenotapp._dto.AppointmentDetailsDTO;
+import com.prenotapp._model.Appointment;
+import com.prenotapp._model.Persona;
+import com.prenotapp._model.Shop;
+import com.prenotapp._repo.IAppointmentRepo;
+import com.prenotapp._service.IAppointmentService;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.prenotapp._dto.AppointmentDetailsDTO;
-import com.prenotapp._model.Appointment;
-import com.prenotapp._repo.IAppointmentRepo;
-import com.prenotapp._service.IAppointmentService;
 
 @Service
 public class AppointmentServiceImpl
@@ -55,17 +55,32 @@ public class AppointmentServiceImpl
 
   private AppointmentDetailsDTO convertToDTO(Appointment appointment) {
     AppointmentDetailsDTO dto = new AppointmentDetailsDTO();
-    dto.setId(appointment.getId());
+    dto.setAppointmentId(appointment.getId());
+
     dto.setDate(
       appointment.getDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
     );
-    dto.setShopName(appointment.getShop().getShopName());
-    dto.setShopAddress(appointment.getShop().getAddress());
-    dto.setShopCity(appointment.getShop().getCity());
-    dto.setShopPhone(appointment.getShop().getPhone());
-    dto.setPersonaFirstName(appointment.getPersona().getFirstName());
-    dto.setPersonaLastName(appointment.getPersona().getLastName());
-    dto.setPersonaPhone(appointment.getPersona().getPhone());
+
+    Shop shop = appointment.getShop();
+    Persona persona = appointment.getPersona();
+
+    AppointmentDetailsDTO.ShopDetailsDTO shopDetailsDTO = new AppointmentDetailsDTO.ShopDetailsDTO(
+      shop.getId(),
+      shop.getShopName(),
+      shop.getAddress(),
+      shop.getCity(),
+      shop.getPhone()
+    );
+    dto.setShopDetails(shopDetailsDTO);
+
+    AppointmentDetailsDTO.PersonaDetailsDTO personaDetailsDTO = new AppointmentDetailsDTO.PersonaDetailsDTO(
+      persona.getId(),
+      persona.getFirstName(),
+      persona.getLastName(),
+      persona.getPhone()
+    );
+    dto.setPersonaDetails(personaDetailsDTO);
+
     return dto;
   }
 }
