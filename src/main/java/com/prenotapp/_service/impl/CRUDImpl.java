@@ -1,4 +1,4 @@
-package com.prenotapp._service_impl;
+package com.prenotapp._service.impl;
 
 import java.util.List;
 

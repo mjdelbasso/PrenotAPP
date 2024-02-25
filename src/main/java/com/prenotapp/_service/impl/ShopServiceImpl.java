@@ -1,4 +1,5 @@
-package com.prenotapp._service_impl;
+package com.prenotapp._service.impl;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,3 +28,4 @@ public class ShopServiceImpl
   @PersistenceContext
   private EntityManager entityManager;
 }
+
