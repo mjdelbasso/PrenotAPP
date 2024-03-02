@@ -12,7 +12,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 @Entity
-@Table(name = "shops")
+@Table(
+    name = "shops",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"shop_name"}, name = "uk_shop_name"),
+        @UniqueConstraint(columnNames = {"email"}, name = "uk_shop_email")
+    }
+)
 public class Shop {
 
   @Id
@@ -34,7 +40,7 @@ public class Shop {
   @Column(name = "phone")
   private String phone;
 
-  @Column(name = "email")
+  @Column(name = "email", unique = true) // Añadimos unique = true aquí también
   private String email;
 
   @Column(name = "website")
