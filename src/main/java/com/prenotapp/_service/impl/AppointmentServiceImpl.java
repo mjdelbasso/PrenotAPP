@@ -15,76 +15,47 @@ import com.prenotapp._repo.IAppointmentRepo;
 import com.prenotapp._service.IAppointmentService;
 
 @Service
-public class AppointmentServiceImpl
-  extends CRUDImpl<Appointment, Integer>
-  implements IAppointmentService {
+public class AppointmentServiceImpl extends CRUDImpl<Appointment, Integer> implements IAppointmentService {
 
-  @Autowired
-  private IAppointmentRepo repo;
+    @Autowired
+    private IAppointmentRepo repo;
 
-  @Override
-  protected IAppointmentRepo getRepo() {
-    return repo;
-  }
-
-  @Override
-  public List<AppointmentDetailsDTO> listAppointments() {
-    List<Appointment> appointments = repo.findAll();
-    return appointments
-      .stream()
-      .map(this::convertToDTO)
-      .collect(Collectors.toList());
-  }
-
-  @Override
-  public AppointmentDetailsDTO findAppointmentById(Integer idAppointment) {
-    if (idAppointment == null || idAppointment <= 0) {
-      return null;
+    @Override
+    protected IAppointmentRepo getRepo() {
+        return repo;
     }
 
-    Appointment appointment = repo.findById(idAppointment).orElse(null);
-    return convertToDTO(appointment);
-  }
+    @Override
+    public List<AppointmentDetailsDTO> listAppointments() {
+        return repo.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
 
-  @Override
-  public boolean appointmentAlreadyExist(Appointment appointment) {
-    return repo.existsByPersonaIdAndShopIdAndDate(
-      appointment.getPersona().getId(),
-      appointment.getShop().getId(),
-      appointment.getDate()
-    );
-  }
+    @Override
+    public AppointmentDetailsDTO findAppointmentById(Integer idAppointment) {
+        if (idAppointment == null || idAppointment <= 0) {
+            return null;
+        }
+        return convertToDTO(repo.findById(idAppointment).orElse(null));
+    }
 
-  private AppointmentDetailsDTO convertToDTO(Appointment appointment) {
-    AppointmentDetailsDTO dto = new AppointmentDetailsDTO();
-    dto.setId(appointment.getId());
+    @Override
+    public boolean appointmentAlreadyExist(Appointment appointment) {
+        return repo.existsByPersonaIdAndShopIdAndDate(appointment.getPersona().getId(), appointment.getShop().getId(), appointment.getDate());
+    }
 
-    dto.setDate(
-      appointment
-        .getDate()
-        .format(DateTimeFormatter.ofPattern("dd-MM-yyyy, HH:mm"))
-    );
+    private AppointmentDetailsDTO convertToDTO(Appointment appointment) {
+        if (appointment == null) {
+            return null;
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy, HH:mm");
+        Shop shop = appointment.getShop();
+        Persona persona = appointment.getPersona();
 
-    Shop shop = appointment.getShop();
-    Persona persona = appointment.getPersona();
-
-    AppointmentDetailsDTO.ShopDetailsDTO shopDetailsDTO = new AppointmentDetailsDTO.ShopDetailsDTO(
-      shop.getId(),
-      shop.getShopName(),
-      shop.getAddress(),
-      shop.getCity(),
-      shop.getPhone()
-    );
-    dto.setShopDetails(shopDetailsDTO);
-
-    AppointmentDetailsDTO.PersonaDetailsDTO personaDetailsDTO = new AppointmentDetailsDTO.PersonaDetailsDTO(
-      persona.getId(),
-      persona.getFirstName(),
-      persona.getLastName(),
-      persona.getPhone()
-    );
-    dto.setPersonaDetails(personaDetailsDTO);
-
-    return dto;
-  }
+        return new AppointmentDetailsDTO(
+                appointment.getId(),
+                appointment.getDate().format(formatter),
+                new AppointmentDetailsDTO.ShopDetailsDTO(shop.getId(), shop.getShopName(), shop.getAddress(), shop.getCity(), shop.getPhone()),
+                new AppointmentDetailsDTO.PersonaDetailsDTO(persona.getId(), persona.getFirstName(), persona.getLastName(), persona.getPhone())
+        );
+    }
 }

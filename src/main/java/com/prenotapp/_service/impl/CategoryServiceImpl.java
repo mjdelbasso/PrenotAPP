@@ -8,15 +8,13 @@ import com.prenotapp._repo.ICategoryRepo;
 import com.prenotapp._service.ICategoryService;
 
 @Service
-public class CategoryServiceImpl
-  extends CRUDImpl<Category, Integer>
-  implements ICategoryService {
+public class CategoryServiceImpl extends CRUDImpl<Category, Integer> implements ICategoryService {
 
-  @Autowired
-  private ICategoryRepo repo;
+    @Autowired
+    private ICategoryRepo repo;
 
-  @Override
-  protected ICategoryRepo getRepo() {
-    return repo;
-  }
+    @Override
+    protected ICategoryRepo getRepo() {
+        return repo;
+    }
 }

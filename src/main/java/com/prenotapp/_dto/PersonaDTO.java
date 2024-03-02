@@ -1,8 +1,10 @@
 package com.prenotapp._dto;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class PersonaDTO {
 

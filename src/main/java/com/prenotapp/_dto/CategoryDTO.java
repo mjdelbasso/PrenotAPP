@@ -1,7 +1,9 @@
 package com.prenotapp._dto;
 
-import lombok.Data;
+import lombok.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class CategoryDTO {
 

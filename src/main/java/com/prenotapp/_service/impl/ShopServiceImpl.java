@@ -11,35 +11,26 @@ import com.prenotapp._repo.IShopRepo;
 import com.prenotapp._service.IShopService;
 
 @Service
-public class ShopServiceImpl
-  extends CRUDImpl<Shop, Integer>
-  implements IShopService {
+public class ShopServiceImpl extends CRUDImpl<Shop, Integer> implements IShopService {
 
-  @Autowired
-  private IShopRepo shopRepo;
+    @Autowired
+    private IShopRepo shopRepo;
 
-  @Autowired
-  private ICategoryRepo categoryRepo;
+    @Autowired
+    private ICategoryRepo categoryRepo;
 
-  @Override
-  protected IGenericRepo<Shop, Integer> getRepo() {
-    return shopRepo;
-  }
-
-  @SuppressWarnings("null")
-  @Override
-  public void addCategorytoShop(Integer shopId, Integer categoryId)
-    throws Exception {
-    Shop shop = shopRepo.findById(shopId).orElse(null);
-    if (shop == null) {
-      throw new Exception("Shop not found");
+    @Override
+    protected IGenericRepo<Shop, Integer> getRepo() {
+        return shopRepo;
     }
-    Category category = categoryRepo.findById(categoryId).orElse(null);
-    if (category == null) {
-      throw new Exception("Category not found");
+
+    @SuppressWarnings("null")
+    @Override
+    public void addCategorytoShop(Integer shopId, Integer categoryId) throws Exception {
+        Shop shop = shopRepo.findById(shopId).orElseThrow(() -> new Exception("Shop not found"));
+        Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new Exception("Category not found"));
+        category.setShop(shop);
+        shop.getCategories().add(category);
+        shopRepo.save(shop);
     }
-    category.setShop(shop);
-    shop.getCategories().add(category);
-    shopRepo.save(shop);
-  }
 }

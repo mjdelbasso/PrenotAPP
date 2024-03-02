@@ -1,8 +1,10 @@
 package com.prenotapp._dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
+
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class AppointmentDetailsDTO {
 
@@ -11,8 +13,9 @@ public class AppointmentDetailsDTO {
   private ShopDetailsDTO shopDetails;
   private PersonaDetailsDTO personaDetails;
 
-  @Data
   @AllArgsConstructor
+  @NoArgsConstructor
+  @Data
   public static class ShopDetailsDTO {
 
     private Integer shopId;

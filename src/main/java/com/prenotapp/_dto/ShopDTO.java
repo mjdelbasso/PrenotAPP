@@ -3,8 +3,10 @@ package com.prenotapp._dto;
 import java.util.List;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class ShopDTO {
 

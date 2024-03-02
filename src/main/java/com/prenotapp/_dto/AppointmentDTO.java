@@ -6,8 +6,10 @@ import com.prenotapp._model.Persona;
 import com.prenotapp._model.Shop;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class AppointmentDTO {
 
