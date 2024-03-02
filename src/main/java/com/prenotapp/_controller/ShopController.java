@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,30 +38,28 @@ public class ShopController {
 
   @GetMapping
   public ResponseEntity<List<ShopDTO>> list() throws Exception {
-    List<Shop> lstShop = service.list();
-    List<ShopDTO> lstShopDTO = lstShop
+    List<ShopDTO> lstShopDTO = service
+      .list()
       .stream()
       .map(s -> mapper.map(s, ShopDTO.class))
       .sorted(Comparator.comparing(ShopDTO::getId))
       .collect(Collectors.toList());
-    return new ResponseEntity<>(lstShopDTO, HttpStatus.OK);
+    return ResponseEntity.ok(lstShopDTO);
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<ShopDTO> listById(@PathVariable("id") Integer id)
     throws Exception {
-    Shop shop = service.listById(id);
-    ShopDTO shopDTO = mapper.map(shop, ShopDTO.class);
-    return new ResponseEntity<>(shopDTO, HttpStatus.OK);
+    return ResponseEntity.ok(mapper.map(service.listById(id), ShopDTO.class));
   }
 
   @PostMapping("/register")
   public ResponseEntity<ShopDTO> register(@RequestBody ShopDTO shopDTO)
     throws Exception {
-    Shop shop = mapper.map(shopDTO, Shop.class);
-    shop = service.register(shop);
-    shopDTO = mapper.map(shop, ShopDTO.class);
-    return new ResponseEntity<>(shopDTO, HttpStatus.CREATED);
+    Shop shop = service.register(mapper.map(shopDTO, Shop.class));
+    return ResponseEntity
+      .status(HttpStatus.CREATED)
+      .body(mapper.map(shop, ShopDTO.class));
   }
 
   @PutMapping("/{id}")
@@ -73,15 +70,14 @@ public class ShopController {
     Shop shop = mapper.map(shopDTO, Shop.class);
     shop.setId(id);
     shop = service.update(shop);
-    shopDTO = mapper.map(shop, ShopDTO.class);
-    return new ResponseEntity<>(shopDTO, HttpStatus.OK);
+    return ResponseEntity.ok(mapper.map(shop, ShopDTO.class));
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
     throws Exception {
     service.delete(id);
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    return ResponseEntity.noContent().build();
   }
 
   @SuppressWarnings("null")
@@ -94,8 +90,7 @@ public class ShopController {
     }
     ShopDTO shopDTO = mapper.map(shop, ShopDTO.class);
     EntityModel<ShopDTO> model = EntityModel.of(shopDTO);
-    WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).list());
-    model.add(linkTo.withRel("all-shops"));
+    model.add(linkTo(methodOn(this.getClass()).list()).withRel("all-shops"));
     return model;
   }
 
@@ -106,9 +101,9 @@ public class ShopController {
   ) {
     try {
       service.addCategorytoShop(shopId, categoryId);
-      return new ResponseEntity<>(HttpStatus.OK);
+      return ResponseEntity.ok().build();
     } catch (Exception e) {
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   }
 }

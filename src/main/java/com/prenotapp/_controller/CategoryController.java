@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,34 +41,27 @@ public class CategoryController {
       .map(category -> mapper.map(category, CategoryDTO.class))
       .sorted(Comparator.comparing(CategoryDTO::getId))
       .collect(Collectors.toList());
-    return new ResponseEntity<>(list, HttpStatus.OK);
+    return ResponseEntity.ok(list);
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<CategoryDTO> listById(@PathVariable("id") Integer id)
     throws Exception {
-    CategoryDTO categoryDTO;
     Category category = categoryService.listById(id);
     if (category == null) {
       throw new ModelNotFoundException("Category not found with ID: " + id);
-    } else {
-      categoryDTO = mapper.map(category, CategoryDTO.class);
     }
-    return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
+    return ResponseEntity.ok(mapper.map(category, CategoryDTO.class));
   }
 
   @PostMapping("/register")
   public ResponseEntity<Void> register(
     @Valid @RequestBody CategoryDTO categoryDTO
   ) throws Exception {
-    Category category = mapper.map(categoryDTO, Category.class);
-    Category registeredCategory = categoryService.register(category);
-    CategoryDTO registeredDTO = mapper.map(
-      registeredCategory,
-      CategoryDTO.class
+    Category category = categoryService.register(
+      mapper.map(categoryDTO, Category.class)
     );
-
-    URI location = new URI("/categories/" + registeredDTO.getId());
+    URI location = new URI("/categories/" + category.getId());
     return ResponseEntity.created(location).build();
   }
 
@@ -81,7 +73,6 @@ public class CategoryController {
     Category category = mapper.map(categoryDTO, Category.class);
     category.setId(id);
     category = categoryService.update(category);
-    CategoryDTO categoryDTO1 = mapper.map(category, CategoryDTO.class);
-    return new ResponseEntity<>(categoryDTO1, HttpStatus.OK);
+    return ResponseEntity.ok(mapper.map(category, CategoryDTO.class));
   }
 }

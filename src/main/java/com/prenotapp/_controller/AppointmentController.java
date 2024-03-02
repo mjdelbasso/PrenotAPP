@@ -36,16 +36,14 @@ public class AppointmentController {
   @GetMapping
   public ResponseEntity<List<AppointmentDetailsDTO>> listAppointments()
     throws Exception {
-    List<AppointmentDetailsDTO> appointmentDTOs = service.listAppointments();
-    return new ResponseEntity<>(appointmentDTOs, HttpStatus.OK);
+    return ResponseEntity.ok(service.listAppointments());
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<AppointmentDetailsDTO> findAppointmentById(
     @PathVariable("id") Integer id
   ) throws Exception {
-    AppointmentDetailsDTO appointmentDTO = service.findAppointmentById(id);
-    return new ResponseEntity<>(appointmentDTO, HttpStatus.OK);
+    return ResponseEntity.ok(service.findAppointmentById(id));
   }
 
   @PostMapping("/register")
@@ -53,11 +51,9 @@ public class AppointmentController {
     @Valid @RequestBody AppointmentDTO appointmentDTO
   ) throws Exception {
     Appointment appointment = mapper.map(appointmentDTO, Appointment.class);
-
-    if (service.AppointmentAlredyExist(appointment)) {
-      return new ResponseEntity<>(HttpStatus.CONFLICT);
+    if (service.appointmentAlreadyExist(appointment)) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
-
     Appointment registeredAppointment = service.register(appointment);
     URI location = new URI("/appointments/" + registeredAppointment.getId());
     return ResponseEntity.created(location).build();
@@ -68,23 +64,20 @@ public class AppointmentController {
     @Valid @RequestBody AppointmentDTO appointmentDTO
   ) throws Exception {
     Appointment appointment = mapper.map(appointmentDTO, Appointment.class);
-
-    if (service.AppointmentAlredyExist(appointment)) {
-      return new ResponseEntity<>(HttpStatus.CONFLICT);
+    if (service.appointmentAlreadyExist(appointment)) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
-
     appointment = service.update(appointment);
-    appointmentDTO = mapper.map(appointment, AppointmentDTO.class);
     AppointmentDetailsDTO appointmentDetailsDTO = service.findAppointmentById(
       appointmentDTO.getId()
     );
-    return new ResponseEntity<>(appointmentDetailsDTO, HttpStatus.OK);
+    return ResponseEntity.ok(appointmentDetailsDTO);
   }
 
   @DeleteMapping("/delete/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
     throws Exception {
     service.delete(id);
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    return ResponseEntity.noContent().build();
   }
 }

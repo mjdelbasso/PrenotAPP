@@ -11,6 +11,6 @@ public interface IAppointmentService extends ICRUD<Appointment, Integer> {
   public AppointmentDetailsDTO findAppointmentById(Integer idAppointment)
     throws Exception;
 
-  public boolean AppointmentAlredyExist(Appointment appointment)
+  public boolean appointmentAlreadyExist(Appointment appointment)
     throws Exception;
 }

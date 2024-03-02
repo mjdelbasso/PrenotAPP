@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,20 +39,23 @@ public class PersonaController {
 
   @GetMapping
   public ResponseEntity<List<PersonaDTO>> list() throws Exception {
-    List<Persona> lstPersona = service.list();
-    List<PersonaDTO> lstPersonaDTO = lstPersona
-      .stream()
-      .map(p -> mapper.map(p, PersonaDTO.class))
-      .collect(Collectors.toList());
-    return new ResponseEntity<>(lstPersonaDTO, HttpStatus.OK);
+    return new ResponseEntity<>(
+      service
+        .list()
+        .stream()
+        .map(p -> mapper.map(p, PersonaDTO.class))
+        .collect(Collectors.toList()),
+      HttpStatus.OK
+    );
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<PersonaDTO> listById(@PathVariable("id") Integer id)
     throws Exception {
-    Persona persona = service.listById(id);
-    PersonaDTO personaDTO = mapper.map(persona, PersonaDTO.class);
-    return new ResponseEntity<>(personaDTO, HttpStatus.OK);
+    return new ResponseEntity<>(
+      mapper.map(service.listById(id), PersonaDTO.class),
+      HttpStatus.OK
+    );
   }
 
   @PostMapping("/register")
@@ -62,8 +64,10 @@ public class PersonaController {
   ) throws Exception {
     Persona persona = mapper.map(personaDTO, Persona.class);
     persona = service.register(persona);
-    personaDTO = mapper.map(persona, PersonaDTO.class);
-    return new ResponseEntity<>(personaDTO, HttpStatus.CREATED);
+    return new ResponseEntity<>(
+      mapper.map(persona, PersonaDTO.class),
+      HttpStatus.CREATED
+    );
   }
 
   @PutMapping("/{id}")
@@ -74,8 +78,10 @@ public class PersonaController {
     Persona persona = mapper.map(personaDTO, Persona.class);
     persona.setId(id);
     persona = service.update(persona);
-    personaDTO = mapper.map(persona, PersonaDTO.class);
-    return new ResponseEntity<>(personaDTO, HttpStatus.OK);
+    return new ResponseEntity<>(
+      mapper.map(persona, PersonaDTO.class),
+      HttpStatus.OK
+    );
   }
 
   @DeleteMapping("/{id}")
@@ -84,7 +90,6 @@ public class PersonaController {
     service.delete(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
-
   @SuppressWarnings("null")
   @GetMapping("/hateoas/{id}")
   public EntityModel<PersonaDTO> listByIdHateoas(
@@ -96,8 +101,7 @@ public class PersonaController {
     }
     PersonaDTO personaDTO = mapper.map(persona, PersonaDTO.class);
     EntityModel<PersonaDTO> model = EntityModel.of(personaDTO);
-    WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).list());
-    model.add(linkTo.withRel("all-personas"));
+    model.add(linkTo(methodOn(this.getClass()).list()).withRel("all-personas"));
     return model;
   }
 }
