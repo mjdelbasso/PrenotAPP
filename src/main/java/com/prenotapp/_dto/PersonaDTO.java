@@ -5,6 +5,7 @@ import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Data
 public class PersonaDTO {
 
