@@ -27,7 +27,7 @@ public class ShopDTO {
 
   private String email;
 
-  private List<String> socials;
+  private String website;
 
   private List<CategoryDTO> categories;
 

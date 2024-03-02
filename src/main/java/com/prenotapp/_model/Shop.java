@@ -37,18 +37,8 @@ public class Shop {
   @Column(name = "email")
   private String email;
 
-  @ManyToMany
-  @JoinTable(
-    name = "shop_socials",
-    joinColumns = @JoinColumn(name = "shop_id", referencedColumnName = "id"),
-    inverseJoinColumns = @JoinColumn(
-      name = "social_id",
-      referencedColumnName = "id"
-    ),
-    foreignKey = @ForeignKey(name = "fk_shop_socials_shop_id"),
-    inverseForeignKey = @ForeignKey(name = "fk_shop_socials_social_id")
-  )
-  private List<Social> socials;
+  @Column(name = "website")
+  private String website;
 
   @ManyToMany
   @JoinTable(
