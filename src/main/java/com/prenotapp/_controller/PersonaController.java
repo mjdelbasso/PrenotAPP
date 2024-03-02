@@ -3,9 +3,13 @@ package com.prenotapp._controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.prenotapp._dto.PersonaDTO;
+import com.prenotapp._model.Persona;
+import com.prenotapp._service.IPersonaService;
+import com.prenotapp.exception.ModelNotFoundException;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
@@ -19,13 +23,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.prenotapp._dto.PersonaDTO;
-import com.prenotapp._model.Persona;
-import com.prenotapp._service.IPersonaService;
-import com.prenotapp.exception.ModelNotFoundException;
-
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/personas")
@@ -50,10 +47,10 @@ public class PersonaController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<PersonaDTO> listById(@PathVariable("id") Integer id)
+  public ResponseEntity<PersonaDTO> findById(@PathVariable("id") Integer id)
     throws Exception {
     return new ResponseEntity<>(
-      mapper.map(service.listById(id), PersonaDTO.class),
+      mapper.map(service.findById(id), PersonaDTO.class),
       HttpStatus.OK
     );
   }
@@ -90,12 +87,13 @@ public class PersonaController {
     service.delete(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
+
   @SuppressWarnings("null")
   @GetMapping("/hateoas/{id}")
-  public EntityModel<PersonaDTO> listByIdHateoas(
+  public EntityModel<PersonaDTO> findByIdHateoas(
     @PathVariable("id") Integer id
   ) throws Exception {
-    Persona persona = service.listById(id);
+    Persona persona = service.findById(id);
     if (persona == null) {
       throw new ModelNotFoundException("Persona not found with ID: " + id);
     }

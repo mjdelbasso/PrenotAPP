@@ -25,7 +25,7 @@ public abstract class CRUDImpl<T, ID> implements ICRUD<T, ID> {
   }
 
   @Override
-  public T listById(ID id) throws Exception {
+  public T findById(ID id) throws Exception {
     return getRepo().findById(id).orElse(null);
   }
 

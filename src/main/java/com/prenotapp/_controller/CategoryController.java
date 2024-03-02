@@ -1,10 +1,14 @@
 package com.prenotapp._controller;
 
+import com.prenotapp._dto.CategoryDTO;
+import com.prenotapp._model.Category;
+import com.prenotapp._service.ICategoryService;
+import com.prenotapp.exception.ModelNotFoundException;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +19,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.prenotapp._dto.CategoryDTO;
-import com.prenotapp._model.Category;
-import com.prenotapp._service.ICategoryService;
-import com.prenotapp.exception.ModelNotFoundException;
-
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/categories")
@@ -45,9 +42,9 @@ public class CategoryController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<CategoryDTO> listById(@PathVariable("id") Integer id)
+  public ResponseEntity<CategoryDTO> findById(@PathVariable("id") Integer id)
     throws Exception {
-    Category category = categoryService.listById(id);
+    Category category = categoryService.findById(id);
     if (category == null) {
       throw new ModelNotFoundException("Category not found with ID: " + id);
     }

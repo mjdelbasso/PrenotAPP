@@ -3,10 +3,13 @@ package com.prenotapp._controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.prenotapp._dto.ShopDTO;
+import com.prenotapp._model.Shop;
+import com.prenotapp._service.IShopService;
+import com.prenotapp.exception.ModelNotFoundException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
@@ -20,11 +23,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.prenotapp._dto.ShopDTO;
-import com.prenotapp._model.Shop;
-import com.prenotapp._service.IShopService;
-import com.prenotapp.exception.ModelNotFoundException;
 
 @RestController
 @RequestMapping("/shops")
@@ -48,9 +46,9 @@ public class ShopController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<ShopDTO> listById(@PathVariable("id") Integer id)
+  public ResponseEntity<ShopDTO> findById(@PathVariable("id") Integer id)
     throws Exception {
-    return ResponseEntity.ok(mapper.map(service.listById(id), ShopDTO.class));
+    return ResponseEntity.ok(mapper.map(service.findById(id), ShopDTO.class));
   }
 
   @PostMapping("/register")
@@ -82,9 +80,9 @@ public class ShopController {
 
   @SuppressWarnings("null")
   @GetMapping("/hateoas/{id}")
-  public EntityModel<ShopDTO> listByIdHateoas(@PathVariable("id") Integer id)
+  public EntityModel<ShopDTO> findByIdHateoas(@PathVariable("id") Integer id)
     throws Exception {
-    Shop shop = service.listById(id);
+    Shop shop = service.findById(id);
     if (shop == null) {
       throw new ModelNotFoundException("Shop not found with ID: " + id);
     }
