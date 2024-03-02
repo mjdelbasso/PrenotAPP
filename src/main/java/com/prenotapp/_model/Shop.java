@@ -1,16 +1,7 @@
 package com.prenotapp._model;
 
+import jakarta.persistence.*;
 import java.util.List;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -46,14 +37,29 @@ public class Shop {
   @Column(name = "email")
   private String email;
 
-  @Column(name = "socials")
-  private List<String> socials;
+  @ManyToMany
+  @JoinTable(
+    name = "shop_socials",
+    joinColumns = @JoinColumn(name = "shop_id", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(
+      name = "social_id",
+      referencedColumnName = "id"
+    ),
+    foreignKey = @ForeignKey(name = "fk_shop_socials_shop_id"),
+    inverseForeignKey = @ForeignKey(name = "fk_shop_socials_social_id")
+  )
+  private List<Social> socials;
 
   @ManyToMany
   @JoinTable(
     name = "shop_category",
-    joinColumns = @JoinColumn(name = "shop_id"),
-    inverseJoinColumns = @JoinColumn(name = "category_id")
+    joinColumns = @JoinColumn(name = "shop_id", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(
+      name = "category_id",
+      referencedColumnName = "id"
+    ),
+    foreignKey = @ForeignKey(name = "fk_shop_category_shop_id"),
+    inverseForeignKey = @ForeignKey(name = "fk_shop_category_category_id")
   )
   private List<Category> categories;
 }

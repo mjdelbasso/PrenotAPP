@@ -28,3 +28,5 @@ public class AppointmentDTO {
   @NotNull
   private Shop shop;
 }
+
+

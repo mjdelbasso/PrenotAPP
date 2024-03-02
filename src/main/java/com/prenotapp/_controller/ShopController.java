@@ -7,6 +7,7 @@ import com.prenotapp._dto.ShopDTO;
 import com.prenotapp._model.Shop;
 import com.prenotapp._service.IShopCategoryService;
 import com.prenotapp._service.IShopService;
+import com.prenotapp._service.IShopSocialService;
 import com.prenotapp.exception.ModelNotFoundException;
 import java.util.Comparator;
 import java.util.List;
@@ -34,6 +35,9 @@ public class ShopController {
 
   @Autowired
   private IShopCategoryService scService;
+
+  @Autowired
+  private IShopSocialService ssService;
 
   @Autowired
   private ModelMapper mapper;
@@ -103,6 +107,45 @@ public class ShopController {
   ) {
     try {
       scService.addCategorytoShop(shopId, categoryId);
+      return ResponseEntity.ok().build();
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+  }
+
+  @DeleteMapping("/{shopId}/categories/{categoryId}")
+  public ResponseEntity<Void> removeCategoryFromShop(
+    @PathVariable("shopId") Integer shopId,
+    @PathVariable("categoryId") Integer categoryId
+  ) {
+    try {
+      scService.removeCategoryFromShop(shopId, categoryId);
+      return ResponseEntity.ok().build();
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+  }
+
+  @PostMapping("/{shopId}/socials/{socialId}")
+  public ResponseEntity<Void> addSocialtoShop(
+    @PathVariable("shopId") Integer shopId,
+    @PathVariable("socialId") Integer socialId
+  ) {
+    try {
+      ssService.addSocialtoShop(shopId, socialId);
+      return ResponseEntity.ok().build();
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+  }
+
+  @DeleteMapping("/{shopId}/socials/{socialId}")
+  public ResponseEntity<Void> removeSocialFromShop(
+    @PathVariable("shopId") Integer shopId,
+    @PathVariable("socialId") Integer socialId
+  ) {
+    try {
+      ssService.removeSocialFromShop(shopId, socialId);
       return ResponseEntity.ok().build();
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

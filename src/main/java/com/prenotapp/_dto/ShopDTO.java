@@ -32,3 +32,5 @@ public class ShopDTO {
   private List<CategoryDTO> categories;
 
 }
+
+

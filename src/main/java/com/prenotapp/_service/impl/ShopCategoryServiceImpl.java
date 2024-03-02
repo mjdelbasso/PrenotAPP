@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.prenotapp._model.Category;
 import com.prenotapp._model.Shop;
 import com.prenotapp._model.ShopCategory;
-import com.prenotapp._repo.IShopCategoriesRepo;
+import com.prenotapp._repo.IShopCategoryRepo;
 import com.prenotapp._service.IShopCategoryService;
 
 @Service
@@ -15,10 +15,10 @@ public class ShopCategoryServiceImpl
   implements IShopCategoryService {
 
   @Autowired
-  private IShopCategoriesRepo repo;
+  private IShopCategoryRepo repo;
 
   @Override
-  protected IShopCategoriesRepo getRepo() {
+  protected IShopCategoryRepo getRepo() {
     return repo;
   }
 
@@ -34,4 +34,10 @@ public class ShopCategoryServiceImpl
     shopCategory.setCategory(category);
     repo.save(shopCategory);
   }
+
+  @Override
+  public void removeCategoryFromShop(Integer shopId, Integer categoryId)
+    throws Exception {
+    repo.deleteCategoryFromShop(shopId, categoryId);
+    }
 }
