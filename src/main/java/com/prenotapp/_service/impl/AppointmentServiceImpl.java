@@ -47,7 +47,7 @@ public class AppointmentServiceImpl
   }
 
   @Override
-  public boolean AppointmentAlredyExist(Appointment appointment) {
+  public boolean appointmentAlreadyExist(Appointment appointment) {
     return repo.existsByPersonaIdAndShopIdAndDate(
       appointment.getPersona().getId(),
       appointment.getShop().getId(),
