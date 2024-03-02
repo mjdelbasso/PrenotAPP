@@ -5,6 +5,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.prenotapp._dto.ShopDTO;
 import com.prenotapp._model.Shop;
+import com.prenotapp._service.IShopCategoryService;
 import com.prenotapp._service.IShopService;
 import com.prenotapp.exception.ModelNotFoundException;
 import java.util.Comparator;
@@ -30,6 +31,9 @@ public class ShopController {
 
   @Autowired
   private IShopService service;
+
+  @Autowired
+  private IShopCategoryService scService;
 
   @Autowired
   private ModelMapper mapper;
@@ -98,7 +102,7 @@ public class ShopController {
     @PathVariable("categoryId") Integer categoryId
   ) {
     try {
-      service.addCategorytoShop(shopId, categoryId);
+      scService.addCategorytoShop(shopId, categoryId);
       return ResponseEntity.ok().build();
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

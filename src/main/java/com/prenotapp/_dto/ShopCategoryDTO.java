@@ -1,5 +1,6 @@
 package com.prenotapp._dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,9 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class CategoryDTO {
+public class ShopCategoryDTO {
 
   private Integer id;
-  private String categoryName;
-  private String description;
+
+  @NotNull
+  private CategoryDTO category;
+
+  @NotNull
+  private ShopDTO shop;
 }
