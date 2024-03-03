@@ -1,14 +1,18 @@
 package com.prenotapp._controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import com.prenotapp._dto.ShopDTO;
 import com.prenotapp._model.Shop;
-import com.prenotapp._service.IShopCategoryService;
 import com.prenotapp._service.IShopService;
+import com.prenotapp.exception.ModelNotFoundException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,9 +30,6 @@ public class ShopController {
 
   @Autowired
   private IShopService service;
-
-  @Autowired
-  private IShopCategoryService scService;
 
   @Autowired
   private ModelMapper mapper;
@@ -77,26 +78,27 @@ public class ShopController {
     return ResponseEntity.noContent().build();
   }
 
+  @SuppressWarnings("null")
+  @GetMapping("/hateoas/{id}")
+  public EntityModel<ShopDTO> findByIdHateoas(@PathVariable("id") Integer id)
+    throws Exception {
+    Shop shop = service.findById(id);
+    if (shop == null) {
+      throw new ModelNotFoundException("Shop not found with ID: " + id);
+    }
+    ShopDTO shopDTO = mapper.map(shop, ShopDTO.class);
+    EntityModel<ShopDTO> model = EntityModel.of(shopDTO);
+    model.add(linkTo(methodOn(this.getClass()).list()).withRel("all-shops"));
+    return model;
+  }
+
   @PostMapping("/{shopId}/categories/{categoryId}")
   public ResponseEntity<Void> addCategorytoShop(
     @PathVariable("shopId") Integer shopId,
     @PathVariable("categoryId") Integer categoryId
   ) {
     try {
-      scService.addCategorytoShop(shopId, categoryId);
-      return ResponseEntity.ok().build();
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
-  }
-
-  @DeleteMapping("/{shopId}/categories/{categoryId}")
-  public ResponseEntity<Void> removeCategoryFromShop(
-    @PathVariable("shopId") Integer shopId,
-    @PathVariable("categoryId") Integer categoryId
-  ) {
-    try {
-      scService.removeCategoryFromShop(shopId, categoryId);
+      service.addCategorytoShop(shopId, categoryId);
       return ResponseEntity.ok().build();
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
