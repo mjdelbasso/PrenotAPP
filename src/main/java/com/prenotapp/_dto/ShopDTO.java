@@ -1,5 +1,6 @@
 package com.prenotapp._dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -29,7 +30,8 @@ public class ShopDTO {
 
   private String website;
 
-  private List<CategoryDTO> categories;
+  @Builder.Default
+  private List<CategoryDTO> categories = new ArrayList<>();
 
 }
 

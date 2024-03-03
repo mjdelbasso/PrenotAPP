@@ -3,13 +3,8 @@ package com.prenotapp._controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import com.prenotapp._dto.ShopDTO;
-import com.prenotapp._model.Shop;
-import com.prenotapp._service.IShopService;
-import com.prenotapp.exception.ModelNotFoundException;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
@@ -24,6 +19,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.prenotapp._dto.ShopDTO;
+import com.prenotapp._model.Shop;
+import com.prenotapp._service.IShopService;
+import com.prenotapp.exception.ModelNotFoundException;
+
 @RestController
 @RequestMapping("/shops")
 public class ShopController {
@@ -36,12 +36,8 @@ public class ShopController {
 
   @GetMapping
   public ResponseEntity<List<ShopDTO>> list() throws Exception {
-    List<ShopDTO> lstShopDTO = service
-      .list()
-      .stream()
-      .map(s -> mapper.map(s, ShopDTO.class))
-      .sorted(Comparator.comparing(ShopDTO::getId))
-      .collect(Collectors.toList());
+   
+    List<ShopDTO> lstShopDTO = service.listAllShops();
     return ResponseEntity.ok(lstShopDTO);
   }
 
@@ -92,16 +88,5 @@ public class ShopController {
     return model;
   }
 
-  @PostMapping("/{shopId}/categories/{categoryId}")
-  public ResponseEntity<Void> addCategorytoShop(
-    @PathVariable("shopId") Integer shopId,
-    @PathVariable("categoryId") Integer categoryId
-  ) {
-    try {
-      service.addCategorytoShop(shopId, categoryId);
-      return ResponseEntity.ok().build();
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
-  }
+  
 }

@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(
-    name = "shops",
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"shop_name"}, name = "uk_shop_name"),
-        @UniqueConstraint(columnNames = {"email"}, name = "uk_shop_email")
-    }
+  name = "shops",
+  uniqueConstraints = {
+    @UniqueConstraint(columnNames = { "shop_name" }, name = "uk_shop_name"),
+    @UniqueConstraint(columnNames = { "email" }, name = "uk_shop_email"),
+  }
 )
 public class Shop {
 
@@ -46,7 +46,7 @@ public class Shop {
   @Column(name = "website")
   private String website;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
     name = "shop_category",
     joinColumns = @JoinColumn(name = "shop_id", referencedColumnName = "id"),
