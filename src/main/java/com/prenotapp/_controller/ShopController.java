@@ -3,8 +3,11 @@ package com.prenotapp._controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.prenotapp._dto.ShopDTO;
+import com.prenotapp._model.Shop;
+import com.prenotapp._service.IShopService;
+import com.prenotapp.exception.ModelNotFoundException;
 import java.util.List;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
@@ -19,11 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.prenotapp._dto.ShopDTO;
-import com.prenotapp._model.Shop;
-import com.prenotapp._service.IShopService;
-import com.prenotapp.exception.ModelNotFoundException;
-
 @RestController
 @RequestMapping("/shops")
 public class ShopController {
@@ -36,7 +34,6 @@ public class ShopController {
 
   @GetMapping
   public ResponseEntity<List<ShopDTO>> list() throws Exception {
-   
     List<ShopDTO> lstShopDTO = service.listAllShops();
     return ResponseEntity.ok(lstShopDTO);
   }
@@ -88,5 +85,20 @@ public class ShopController {
     return model;
   }
 
-  
+  @PostMapping("/new-category/{idShop}/{idCategory}")
+  public ResponseEntity<ShopDTO> addCategoryToShop(
+    @PathVariable("idShop") Integer idShop,
+    @PathVariable("idCategory") Integer idCategory
+  ) throws Exception {
+    return ResponseEntity.ok(service.addCategoryToShop(idShop, idCategory));
+  }
+
+  @DeleteMapping("/remove-category/{idShop}/{idCategory}")
+  public ResponseEntity<Void> removeCategoryFromShop(
+    @PathVariable("idShop") Integer idShop,
+    @PathVariable("idCategory") Integer idCategory
+  ) throws Exception {
+    service.removeCategoryFromShop(idShop, idCategory);
+    return ResponseEntity.noContent().build();
+  }
 }
