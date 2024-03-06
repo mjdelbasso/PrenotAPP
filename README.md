@@ -1,5 +1,7 @@
 PrenotAPP: Simple REST API for Booking Appointments
+
 Project Description:
+
 PrenotAPP is a straightforward REST API developed for practice purposes, simulating an ecosystem of shops and clients. Each shop offers various services categorized by type, and clients can easily schedule appointments with these shops. It's designed to facilitate booking appointments at barber shops, tattoo studios, beauty salons, and similar establishments.
 
 Key Features:
