@@ -8,8 +8,10 @@ import com.prenotapp._model.Persona;
 import com.prenotapp._service.IPersonaService;
 import com.prenotapp.exception.ModelNotFoundException;
 import jakarta.validation.Valid;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.NonNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
@@ -40,7 +42,8 @@ public class PersonaController {
       service
         .list()
         .stream()
-        .map(p -> mapper.map(p, PersonaDTO.class))
+        .map(persona -> toDTO(persona))
+        .sorted(Comparator.comparing(PersonaDTO::getId))
         .collect(Collectors.toList()),
       HttpStatus.OK
     );
@@ -49,22 +52,16 @@ public class PersonaController {
   @GetMapping("/{id}")
   public ResponseEntity<PersonaDTO> findById(@PathVariable("id") Integer id)
     throws Exception {
-    return new ResponseEntity<>(
-      mapper.map(service.findById(id), PersonaDTO.class),
-      HttpStatus.OK
-    );
+    return new ResponseEntity<>(toDTO(service.findById(id)), HttpStatus.OK);
   }
 
   @PostMapping("/register")
   public ResponseEntity<PersonaDTO> register(
     @Valid @RequestBody PersonaDTO personaDTO
   ) throws Exception {
-    Persona persona = mapper.map(personaDTO, Persona.class);
+    Persona persona = toEntity(personaDTO);
     persona = service.register(persona);
-    return new ResponseEntity<>(
-      mapper.map(persona, PersonaDTO.class),
-      HttpStatus.CREATED
-    );
+    return new ResponseEntity<>(toDTO(persona), HttpStatus.CREATED);
   }
 
   @PutMapping("/{id}")
@@ -72,13 +69,10 @@ public class PersonaController {
     @PathVariable("id") Integer id,
     @RequestBody PersonaDTO personaDTO
   ) throws Exception {
-    Persona persona = mapper.map(personaDTO, Persona.class);
+    Persona persona = toEntity(personaDTO);
     persona.setId(id);
     persona = service.update(persona);
-    return new ResponseEntity<>(
-      mapper.map(persona, PersonaDTO.class),
-      HttpStatus.OK
-    );
+    return new ResponseEntity<>(toDTO(persona), HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")
@@ -91,15 +85,23 @@ public class PersonaController {
   @SuppressWarnings("null")
   @GetMapping("/hateoas/{id}")
   public EntityModel<PersonaDTO> findByIdHateoas(
-    @PathVariable("id") Integer id
+    @PathVariable("id") @NonNull Integer id
   ) throws Exception {
     Persona persona = service.findById(id);
     if (persona == null) {
       throw new ModelNotFoundException("Persona not found with ID: " + id);
     }
-    PersonaDTO personaDTO = mapper.map(persona, PersonaDTO.class);
+    PersonaDTO personaDTO = toDTO(persona);
     EntityModel<PersonaDTO> model = EntityModel.of(personaDTO);
     model.add(linkTo(methodOn(this.getClass()).list()).withRel("all-personas"));
     return model;
+  }
+
+  public PersonaDTO toDTO(Persona persona) {
+    return mapper.map(persona, PersonaDTO.class);
+  }
+
+  public Persona toEntity(PersonaDTO personaDTO) {
+    return mapper.map(personaDTO, Persona.class);
   }
 }

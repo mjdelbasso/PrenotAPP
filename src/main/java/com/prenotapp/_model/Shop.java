@@ -1,7 +1,19 @@
 package com.prenotapp._model;
 
-import jakarta.persistence.*;
 import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,7 +52,7 @@ public class Shop {
   @Column(name = "phone")
   private String phone;
 
-  @Column(name = "email", unique = true) // Añadimos unique = true aquí también
+  @Column(name = "email", unique = true)
   private String email;
 
   @Column(name = "website")

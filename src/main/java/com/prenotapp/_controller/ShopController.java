@@ -35,22 +35,20 @@ public class ShopController {
   @GetMapping
   public ResponseEntity<List<ShopDTO>> list() throws Exception {
     List<ShopDTO> lstShopDTO = service.listAllShops();
-    return ResponseEntity.ok(lstShopDTO);
+    return new ResponseEntity<>((lstShopDTO), HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<ShopDTO> findById(@PathVariable("id") Integer id)
     throws Exception {
-    return ResponseEntity.ok(mapper.map(service.findById(id), ShopDTO.class));
+    return new ResponseEntity<>(toDTO(service.findById(id)), HttpStatus.OK);
   }
 
   @PostMapping("/register")
   public ResponseEntity<ShopDTO> register(@RequestBody ShopDTO shopDTO)
     throws Exception {
-    Shop shop = service.register(mapper.map(shopDTO, Shop.class));
-    return ResponseEntity
-      .status(HttpStatus.CREATED)
-      .body(mapper.map(shop, ShopDTO.class));
+    Shop shop = service.register(toEntity(shopDTO));
+    return new ResponseEntity<>(toDTO(shop), HttpStatus.CREATED);
   }
 
   @PutMapping("/{id}")
@@ -58,17 +56,17 @@ public class ShopController {
     @PathVariable("id") Integer id,
     @RequestBody ShopDTO shopDTO
   ) throws Exception {
-    Shop shop = mapper.map(shopDTO, Shop.class);
+    Shop shop = toEntity(shopDTO);
     shop.setId(id);
     shop = service.update(shop);
-    return ResponseEntity.ok(mapper.map(shop, ShopDTO.class));
+    return new ResponseEntity<>(toDTO(shop), HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
     throws Exception {
     service.delete(id);
-    return ResponseEntity.noContent().build();
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
   @SuppressWarnings("null")
@@ -90,7 +88,10 @@ public class ShopController {
     @PathVariable("idShop") Integer idShop,
     @PathVariable("idCategory") Integer idCategory
   ) throws Exception {
-    return ResponseEntity.ok(service.addCategoryToShop(idShop, idCategory));
+    return new ResponseEntity<>(
+      service.addCategoryToShop(idShop, idCategory),
+      HttpStatus.OK
+    );
   }
 
   @DeleteMapping("/remove-category/{idShop}/{idCategory}")
@@ -99,6 +100,14 @@ public class ShopController {
     @PathVariable("idCategory") Integer idCategory
   ) throws Exception {
     service.removeCategoryFromShop(idShop, idCategory);
-    return ResponseEntity.noContent().build();
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
+
+  public ShopDTO toDTO(Shop shop) {
+    return mapper.map(shop, ShopDTO.class);
+  }
+
+  public Shop toEntity(ShopDTO shopDTO) {
+    return mapper.map(shopDTO, Shop.class);
   }
 }
