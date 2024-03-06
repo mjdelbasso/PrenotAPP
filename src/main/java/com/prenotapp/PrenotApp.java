@@ -9,5 +9,4 @@ public class PrenotApp {
   public static void main(String[] args) {
     SpringApplication.run(PrenotApp.class, args);
   }
-  // I'm loving this <3
 }
