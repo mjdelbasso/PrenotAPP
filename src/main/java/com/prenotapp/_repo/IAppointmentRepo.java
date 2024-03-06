@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 
 import com.prenotapp._model.Appointment;
 
-public interface IAppointmentRepo extends IGenericRepo<Appointment, Integer> {
+public interface IAppointmentRepo extends IGenericRepo<Appointment, Long> {
   boolean existsByPersonaIdAndShopIdAndDate(
-    Integer personaId,
-    Integer shopId,
+    Long personaId,
+    Long shopId,
     LocalDateTime date
   );
 }

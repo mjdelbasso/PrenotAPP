@@ -50,7 +50,7 @@ public class PersonaController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<PersonaDTO> findById(@PathVariable("id") Integer id)
+  public ResponseEntity<PersonaDTO> findById(@PathVariable("id") Long id)
     throws Exception {
     return new ResponseEntity<>(toDTO(service.findById(id)), HttpStatus.OK);
   }
@@ -66,7 +66,7 @@ public class PersonaController {
 
   @PutMapping("/{id}")
   public ResponseEntity<PersonaDTO> update(
-    @PathVariable("id") Integer id,
+    @PathVariable("id") Long id,
     @RequestBody PersonaDTO personaDTO
   ) throws Exception {
     Persona persona = toEntity(personaDTO);
@@ -76,7 +76,7 @@ public class PersonaController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
+  public ResponseEntity<Void> delete(@PathVariable("id") Long id)
     throws Exception {
     service.delete(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -85,7 +85,7 @@ public class PersonaController {
   @SuppressWarnings("null")
   @GetMapping("/hateoas/{id}")
   public EntityModel<PersonaDTO> findByIdHateoas(
-    @PathVariable("id") @NonNull Integer id
+    @PathVariable("id") @NonNull Long id
   ) throws Exception {
     Persona persona = service.findById(id);
     if (persona == null) {

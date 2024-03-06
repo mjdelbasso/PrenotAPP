@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ShopCategoryServiceImpl
-  extends CRUDImpl<ShopCategory, Integer>
+  extends CRUDImpl<ShopCategory, Long>
   implements IShopCategoryService {
 
   @Autowired

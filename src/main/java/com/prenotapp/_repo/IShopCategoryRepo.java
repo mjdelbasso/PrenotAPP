@@ -5,7 +5,7 @@ import com.prenotapp._model.Shop;
 import com.prenotapp._model.ShopCategory;
 
 public interface IShopCategoryRepo
-  extends IGenericRepo<ShopCategory, Integer> {
+  extends IGenericRepo<ShopCategory, Long> {
 
     ShopCategory findByShopAndCategory(Shop shop, Category category);
   }

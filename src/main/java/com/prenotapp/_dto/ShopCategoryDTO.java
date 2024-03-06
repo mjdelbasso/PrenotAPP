@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class ShopCategoryDTO {
 
-  private Integer id;
+  private Long id;
 
   @NotNull
   private CategoryDTO category;

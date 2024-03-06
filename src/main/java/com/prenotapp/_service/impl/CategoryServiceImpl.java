@@ -9,7 +9,7 @@ import com.prenotapp._service.ICategoryService;
 
 @Service
 public class CategoryServiceImpl
-  extends CRUDImpl<Category, Integer>
+  extends CRUDImpl<Category, Long>
   implements ICategoryService {
 
   @Autowired

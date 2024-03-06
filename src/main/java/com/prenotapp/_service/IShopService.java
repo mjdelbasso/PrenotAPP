@@ -4,14 +4,12 @@ import com.prenotapp._dto.ShopDTO;
 import com.prenotapp._model.Shop;
 import java.util.List;
 
-public interface IShopService extends ICRUD<Shop, Integer> {
+public interface IShopService extends ICRUD<Shop, Long> {
   List<ShopDTO> listAllShops() throws Exception;
 
-  ShopDTO getShopById(Integer id) throws Exception;
+  ShopDTO getShopById(Long id) throws Exception;
 
-  ShopDTO addCategoryToShop(Integer idShop, Integer idCategory)
-    throws Exception;
+  ShopDTO addCategoryToShop(Long idShop, Long idCategory) throws Exception;
 
-  void removeCategoryFromShop(Integer idShop, Integer idCategory)
-    throws Exception;
+  void removeCategoryFromShop(Long idShop, Long idCategory) throws Exception;
 }

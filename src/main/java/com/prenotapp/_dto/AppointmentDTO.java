@@ -1,11 +1,9 @@
 package com.prenotapp._dto;
 
-import java.time.LocalDateTime;
-
 import com.prenotapp._model.Persona;
 import com.prenotapp._model.Shop;
-
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class AppointmentDTO {
 
-  private Integer id;
+  private Long id;
 
   @NotNull
   private LocalDateTime date;
@@ -28,5 +26,3 @@ public class AppointmentDTO {
   @NotNull
   private Shop shop;
 }
-
-

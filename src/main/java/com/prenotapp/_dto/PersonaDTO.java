@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class PersonaDTO {
 
-  private Integer id;
+  private Long id;
 
   private String email;
 

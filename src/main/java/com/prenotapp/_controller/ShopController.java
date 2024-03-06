@@ -39,7 +39,7 @@ public class ShopController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<ShopDTO> findById(@PathVariable("id") Integer id)
+  public ResponseEntity<ShopDTO> findById(@PathVariable("id") Long id)
     throws Exception {
     return new ResponseEntity<>(toDTO(service.findById(id)), HttpStatus.OK);
   }
@@ -53,7 +53,7 @@ public class ShopController {
 
   @PutMapping("/{id}")
   public ResponseEntity<ShopDTO> update(
-    @PathVariable("id") Integer id,
+    @PathVariable("id") Long id,
     @RequestBody ShopDTO shopDTO
   ) throws Exception {
     Shop shop = toEntity(shopDTO);
@@ -63,7 +63,7 @@ public class ShopController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
+  public ResponseEntity<Void> delete(@PathVariable("id") Long id)
     throws Exception {
     service.delete(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -71,7 +71,7 @@ public class ShopController {
 
   @SuppressWarnings("null")
   @GetMapping("/hateoas/{id}")
-  public EntityModel<ShopDTO> findByIdHateoas(@PathVariable("id") Integer id)
+  public EntityModel<ShopDTO> findByIdHateoas(@PathVariable("id") Long id)
     throws Exception {
     Shop shop = service.findById(id);
     if (shop == null) {
@@ -85,8 +85,8 @@ public class ShopController {
 
   @PostMapping("/new-category/{idShop}/{idCategory}")
   public ResponseEntity<ShopDTO> addCategoryToShop(
-    @PathVariable("idShop") Integer idShop,
-    @PathVariable("idCategory") Integer idCategory
+    @PathVariable("idShop") Long idShop,
+    @PathVariable("idCategory") Long idCategory
   ) throws Exception {
     return new ResponseEntity<>(
       service.addCategoryToShop(idShop, idCategory),
@@ -96,8 +96,8 @@ public class ShopController {
 
   @DeleteMapping("/remove-category/{idShop}/{idCategory}")
   public ResponseEntity<Void> removeCategoryFromShop(
-    @PathVariable("idShop") Integer idShop,
-    @PathVariable("idCategory") Integer idCategory
+    @PathVariable("idShop") Long idShop,
+    @PathVariable("idCategory") Long idCategory
   ) throws Exception {
     service.removeCategoryFromShop(idShop, idCategory);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);

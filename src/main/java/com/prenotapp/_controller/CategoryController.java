@@ -43,7 +43,7 @@ public class CategoryController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<CategoryDTO> findById(@PathVariable("id") Integer id)
+  public ResponseEntity<CategoryDTO> findById(@PathVariable("id") Long id)
     throws Exception {
     Category category = categoryService.findById(id);
     if (category == null) {
@@ -62,7 +62,7 @@ public class CategoryController {
 
   @PutMapping("/{id}")
   public ResponseEntity<CategoryDTO> update(
-    @PathVariable("id") Integer id,
+    @PathVariable("id") Long id,
     @RequestBody CategoryDTO categoryDTO
   ) throws Exception {
     Category category = toEntity(categoryDTO);
@@ -72,7 +72,7 @@ public class CategoryController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
+  public ResponseEntity<Void> delete(@PathVariable("id") Long id)
     throws Exception {
     categoryService.delete(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);

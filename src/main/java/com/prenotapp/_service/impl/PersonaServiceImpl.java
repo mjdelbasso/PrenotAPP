@@ -8,7 +8,7 @@ import com.prenotapp._repo.IPersonaRepo;
 import com.prenotapp._service.IPersonaService;
 
 @Service
-public class PersonaServiceImpl extends CRUDImpl<Persona, Integer> implements IPersonaService {
+public class PersonaServiceImpl extends CRUDImpl<Persona, Long> implements IPersonaService {
 
     @Autowired
     private IPersonaRepo repo;

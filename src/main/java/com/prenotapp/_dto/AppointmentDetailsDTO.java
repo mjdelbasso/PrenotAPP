@@ -5,14 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
 public class AppointmentDetailsDTO {
 
-  private Integer id;
+  private Long id;
   private String date;
   private ShopDetailsDTO shopDetails;
   private PersonaDetailsDTO personaDetails;
@@ -22,7 +21,7 @@ public class AppointmentDetailsDTO {
   @Data
   public static class ShopDetailsDTO {
 
-    private Integer shopId;
+    private Long shopId;
     private String shopName;
     private String address;
     private String city;
@@ -33,7 +32,7 @@ public class AppointmentDetailsDTO {
   @AllArgsConstructor
   public static class PersonaDetailsDTO {
 
-    private Integer personaId;
+    private Long personaId;
     private String personaFirstName;
     private String personaLastName;
     private String personaPhone;

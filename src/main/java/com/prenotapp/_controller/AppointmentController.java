@@ -1,7 +1,11 @@
 package com.prenotapp._controller;
 
+import com.prenotapp._dto.AppointmentDTO;
+import com.prenotapp._dto.AppointmentDetailsDTO;
+import com.prenotapp._model.Appointment;
+import com.prenotapp._service.IAppointmentService;
+import jakarta.validation.Valid;
 import java.util.List;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,13 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.prenotapp._dto.AppointmentDTO;
-import com.prenotapp._dto.AppointmentDetailsDTO;
-import com.prenotapp._model.Appointment;
-import com.prenotapp._service.IAppointmentService;
-
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/appointments")
@@ -40,7 +37,7 @@ public class AppointmentController {
 
   @GetMapping("/{id}")
   public ResponseEntity<AppointmentDetailsDTO> findAppointmentById(
-    @PathVariable("id") Integer id
+    @PathVariable("id") Long id
   ) throws Exception {
     return new ResponseEntity<>(service.findAppointmentById(id), HttpStatus.OK);
   }
@@ -77,7 +74,7 @@ public class AppointmentController {
   }
 
   @DeleteMapping("/delete/{id}")
-  public ResponseEntity<Void> delete(@PathVariable("id") Integer id)
+  public ResponseEntity<Void> delete(@PathVariable("id") Long id)
     throws Exception {
     service.delete(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);

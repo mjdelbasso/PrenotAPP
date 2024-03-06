@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ShopServiceImpl
-  extends CRUDImpl<Shop, Integer>
+  extends CRUDImpl<Shop, Long>
   implements IShopService {
 
   @Autowired
@@ -33,7 +33,7 @@ public class ShopServiceImpl
   private ModelMapper mapper;
 
   @Override
-  protected IGenericRepo<Shop, Integer> getRepo() {
+  protected IGenericRepo<Shop, Long> getRepo() {
     return shopRepo;
   }
 
@@ -47,15 +47,15 @@ public class ShopServiceImpl
   }
 
   @Override
-  public ShopDTO getShopById(@NonNull Integer id) {
+  public ShopDTO getShopById(@NonNull Long id) {
     Shop shop = shopRepo.findById(id).get();
     return mapper.map(shop, ShopDTO.class);
   }
 
   @Override
   public ShopDTO addCategoryToShop(
-    @NonNull Integer idShop,
-    @NonNull Integer idCategory
+    @NonNull Long idShop,
+    @NonNull Long idCategory
   ) {
     Shop shop = shopRepo.findById(idShop).get();
     shop.getCategories().add(categoryRepo.findById(idCategory).get());
@@ -64,8 +64,8 @@ public class ShopServiceImpl
 
   @Override
   public void removeCategoryFromShop(
-    @NonNull Integer idShop,
-    @NonNull Integer idCategory
+    @NonNull Long idShop,
+    @NonNull Long idCategory
   ) {
     Shop shop = shopRepo.findById(idShop).get();
     shop.getCategories().remove(categoryRepo.findById(idCategory).get());
