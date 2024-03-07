@@ -27,8 +27,9 @@ public class AppointmentServiceImpl implements IAppointmentService {
   @Autowired
   private ModelMapper mapper;
 
+  @Override
   @Transactional(readOnly = true)
-  public List<AppointmentDetailsDTO> list() {
+  public List<AppointmentDetailsDTO> list() throws Exception {
     return repo
       .findAll()
       .stream()
@@ -36,6 +37,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
       .collect(Collectors.toList());
   }
 
+  @Override
   @Transactional(readOnly = true)
   public AppointmentDetailsDTO findById(@NonNull Long idAppointment) {
     return toDTO(repo.findById(idAppointment).get());
@@ -50,18 +52,20 @@ public class AppointmentServiceImpl implements IAppointmentService {
     );
   }
 
+  @Override
   @Transactional
   public AppointmentDetailsDTO register(AppointmentDTO appointment)
     throws Exception {
     return toDTO(repo.save(toEntity(appointment)));
   }
 
+  @Override
   @Transactional
   public AppointmentDetailsDTO update(AppointmentDTO appointment)
     throws Exception {
     return toDTO(repo.save(toEntity(appointment)));
   }
-
+  @Override
   @Transactional
   public void delete(@NonNull Long id) throws Exception {
     repo.deleteById(id);
