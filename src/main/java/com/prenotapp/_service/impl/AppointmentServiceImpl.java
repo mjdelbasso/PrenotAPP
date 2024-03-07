@@ -7,14 +7,11 @@ import com.prenotapp._model.Persona;
 import com.prenotapp._model.Shop;
 import com.prenotapp._repo.IAppointmentRepo;
 import com.prenotapp._service.IAppointmentService;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.NonNull;
-import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.spi.MappingContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,6 +64,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
     throws Exception {
     return toDTO(repo.save(toEntity(appointment)));
   }
+
   @Override
   @Transactional
   public void delete(@NonNull Long id) throws Exception {
@@ -101,7 +99,6 @@ public class AppointmentServiceImpl implements IAppointmentService {
       )
     );
   }
-  
 
   private Appointment toEntity(AppointmentDTO appointment) {
     if (appointment == null) {
