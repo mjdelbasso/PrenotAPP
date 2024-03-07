@@ -1,14 +1,5 @@
 package com.prenotapp._service.impl;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.prenotapp._dto.ShopDTO;
 import com.prenotapp._model.Category;
 import com.prenotapp._model.Shop;
@@ -18,8 +9,14 @@ import com.prenotapp._repo.IShopCategoryRepo;
 import com.prenotapp._repo.IShopRepo;
 import com.prenotapp._service.IShopService;
 import com.prenotapp.exception.ModelNotFoundException;
-
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.NonNull;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @SuppressWarnings("null")
@@ -39,7 +36,7 @@ public class ShopServiceImpl implements IShopService {
 
   @Override
   @Transactional(readOnly = true)
-  public List<ShopDTO> list() {
+  public List<ShopDTO> list() throws Exception {
     return shopRepo
       .findAll()
       .stream()
@@ -82,7 +79,7 @@ public class ShopServiceImpl implements IShopService {
   public ShopDTO addCategoryToShop(
     @NonNull Long idShop,
     @NonNull Long idCategory
-  ) {
+  ) throws Exception {
     Shop shop = shopRepo
       .findById(idShop)
       .orElseThrow(() ->
@@ -103,7 +100,7 @@ public class ShopServiceImpl implements IShopService {
   public void removeCategoryFromShop(
     @NonNull Long idShop,
     @NonNull Long idCategory
-  ) {
+  ) throws Exception {
     Shop shop = shopRepo
       .findById(idShop)
       .orElseThrow(() ->

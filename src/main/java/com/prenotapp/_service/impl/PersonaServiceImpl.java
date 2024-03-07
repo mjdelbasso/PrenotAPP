@@ -28,7 +28,7 @@ public class PersonaServiceImpl implements IPersonaService {
 
   @Override
   @Transactional(readOnly = true)
-  public List<PersonaDTO> list() {
+  public List<PersonaDTO> list() throws Exception {
     return repo
       .findAll()
       .stream()
@@ -39,25 +39,25 @@ public class PersonaServiceImpl implements IPersonaService {
 
   @Override
   @Transactional
-  public PersonaDTO register(@NonNull PersonaDTO personaDTO) {
+  public PersonaDTO register(@NonNull PersonaDTO personaDTO) throws Exception {
     return toDTO(repo.save(toEntity(personaDTO)));
   }
 
   @Override
   @Transactional
-  public PersonaDTO update(@NonNull PersonaDTO personaDTO) {
+  public PersonaDTO update(@NonNull PersonaDTO personaDTO) throws Exception{
     return toDTO(repo.save(toEntity(personaDTO)));
   }
 
   @Override
   @Transactional(readOnly = true)
-  public PersonaDTO findById(@NonNull Long id) {
+  public PersonaDTO findById(@NonNull Long id) throws Exception{
     return toDTO(repo.findById(id).get());
   }
 
   @Override
   @Transactional
-  public void delete(@NonNull Long id) {
+  public void delete(@NonNull Long id) throws Exception{
     repo.deleteById(id);
   }
 
