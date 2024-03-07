@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.prenotapp._dto.PersonaDTO;
 import com.prenotapp._model.Persona;
@@ -26,6 +27,7 @@ public class PersonaServiceImpl implements IPersonaService {
   private ModelMapper mapper;
 
   @Override
+  @Transactional(readOnly = true)
   public List<PersonaDTO> list() {
     return repo
       .findAll()
@@ -36,30 +38,34 @@ public class PersonaServiceImpl implements IPersonaService {
   }
 
   @Override
+  @Transactional
   public PersonaDTO register(@NonNull PersonaDTO personaDTO) {
     return toDTO(repo.save(toEntity(personaDTO)));
   }
 
   @Override
+  @Transactional
   public PersonaDTO update(@NonNull PersonaDTO personaDTO) {
     return toDTO(repo.save(toEntity(personaDTO)));
   }
 
   @Override
+  @Transactional(readOnly = true)
   public PersonaDTO findById(@NonNull Long id) {
     return toDTO(repo.findById(id).get());
   }
 
   @Override
+  @Transactional
   public void delete(@NonNull Long id) {
     repo.deleteById(id);
   }
 
-  public PersonaDTO toDTO(@NonNull Persona persona) {
+  private PersonaDTO toDTO(@NonNull Persona persona) {
     return mapper.map(persona, PersonaDTO.class);
   }
 
-  public Persona toEntity(@NonNull PersonaDTO personaDTO) {
+  private Persona toEntity(@NonNull PersonaDTO personaDTO) {
     return mapper.map(personaDTO, Persona.class);
   }
 }

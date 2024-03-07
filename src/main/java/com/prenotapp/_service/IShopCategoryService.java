@@ -1,5 +1,5 @@
 package com.prenotapp._service;
 
-import com.prenotapp._model.ShopCategory;
+import com.prenotapp._dto.ShopCategoryDTO;
 
-public interface IShopCategoryService extends ICRUD<ShopCategory, Long> {}
+public interface IShopCategoryService extends ICRUD<ShopCategoryDTO, Long> {}
