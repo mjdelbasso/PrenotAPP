@@ -3,6 +3,8 @@ package com.prenotapp._service.impl;
 import com.prenotapp._dto.AppointmentDTO;
 import com.prenotapp._dto.AppointmentDetailsDTO;
 import com.prenotapp._model.Appointment;
+import com.prenotapp._model.Persona;
+import com.prenotapp._model.Shop;
 import com.prenotapp._repo.IAppointmentRepo;
 import com.prenotapp._service.IAppointmentService;
 import java.time.LocalDateTime;
@@ -75,22 +77,31 @@ public class AppointmentServiceImpl implements IAppointmentService {
     if (appointment == null) {
       return null;
     }
-
-    mapper.addConverter(
-      new Converter<LocalDateTime, String>() {
-        @Override
-        public String convert(MappingContext<LocalDateTime, String> context) {
-          LocalDateTime date = context.getSource();
-          DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
-            "dd-MM-yyyy, HH:mm"
-          );
-          return date.format(formatter);
-        }
-      }
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+      "dd-MM-yyyy, HH:mm"
     );
+    Shop shop = appointment.getShop();
+    Persona persona = appointment.getPersona();
 
-    return mapper.map(appointment, AppointmentDetailsDTO.class);
+    return new AppointmentDetailsDTO(
+      appointment.getId(),
+      appointment.getDate().format(formatter),
+      new AppointmentDetailsDTO.ShopDetailsDTO(
+        shop.getId(),
+        shop.getShopName(),
+        shop.getAddress(),
+        shop.getCity(),
+        shop.getPhone()
+      ),
+      new AppointmentDetailsDTO.PersonaDetailsDTO(
+        persona.getId(),
+        persona.getFirstName(),
+        persona.getLastName(),
+        persona.getPhone()
+      )
+    );
   }
+  
 
   private Appointment toEntity(AppointmentDTO appointment) {
     if (appointment == null) {
