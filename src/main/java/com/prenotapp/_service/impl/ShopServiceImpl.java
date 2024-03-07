@@ -1,24 +1,26 @@
 package com.prenotapp._service.impl;
 
-import com.prenotapp._dto.ShopDTO;
-import com.prenotapp._model.Shop;
-import com.prenotapp._model.ShopCategory;
-import com.prenotapp._repo.ICategoryRepo;
-import com.prenotapp._repo.IGenericRepo;
-import com.prenotapp._repo.IShopCategoryRepo;
-import com.prenotapp._repo.IShopRepo;
-import com.prenotapp._service.IShopService;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import lombok.NonNull;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.prenotapp._dto.ShopDTO;
+import com.prenotapp._model.Category;
+import com.prenotapp._model.Shop;
+import com.prenotapp._model.ShopCategory;
+import com.prenotapp._repo.ICategoryRepo;
+import com.prenotapp._repo.IShopCategoryRepo;
+import com.prenotapp._repo.IShopRepo;
+import com.prenotapp._service.IShopService;
+
+import lombok.NonNull;
+
 @Service
-public class ShopServiceImpl
-  extends CRUDImpl<Shop, Long>
-  implements IShopService {
+@SuppressWarnings("null")
+public class ShopServiceImpl implements IShopService {
 
   @Autowired
   private IShopRepo shopRepo;
@@ -32,24 +34,23 @@ public class ShopServiceImpl
   @Autowired
   private ModelMapper mapper;
 
-  @Override
-  protected IGenericRepo<Shop, Long> getRepo() {
+  protected IShopRepo getRepo() {
     return shopRepo;
   }
 
   @Override
-  public List<ShopDTO> listAllShops() {
-    List<ShopDTO> lstShopDTO = new ArrayList<>();
-    for (Shop shop : shopRepo.findAll()) {
-      lstShopDTO.add(mapper.map(shop, ShopDTO.class));
-    }
-    return lstShopDTO;
+  public List<ShopDTO> list() {
+    return shopRepo
+      .findAll()
+      .stream()
+      .map(this::toDTO)
+      .sorted(Comparator.comparing(ShopDTO::getId))
+      .toList();
   }
 
   @Override
-  public ShopDTO getShopById(@NonNull Long id) {
-    Shop shop = shopRepo.findById(id).get();
-    return mapper.map(shop, ShopDTO.class);
+  public ShopDTO findById(@NonNull Long id) {
+    return toDTO(shopRepo.findById(id).get());
   }
 
   @Override
@@ -58,8 +59,9 @@ public class ShopServiceImpl
     @NonNull Long idCategory
   ) {
     Shop shop = shopRepo.findById(idShop).get();
-    shop.getCategories().add(categoryRepo.findById(idCategory).get());
-    return mapper.map(shopRepo.save(shop), ShopDTO.class);
+    Category category = categoryRepo.findById(idCategory).get();
+    shop.getCategories().add(category);
+    return toDTO(shopRepo.save(shop));
   }
 
   @Override
@@ -68,12 +70,37 @@ public class ShopServiceImpl
     @NonNull Long idCategory
   ) {
     Shop shop = shopRepo.findById(idShop).get();
-    shop.getCategories().remove(categoryRepo.findById(idCategory).get());
+    Category category = categoryRepo.findById(idCategory).get();
+    shop.getCategories().remove(category);
     ShopCategory shopCategory = shopCategoryRepo.findByShopAndCategory(
       shop,
-      categoryRepo.findById(idCategory).get()
+      category
     );
     if (shopCategory != null) shopCategoryRepo.delete(shopCategory);
     shopRepo.save(shop);
+  }
+
+  
+  @Override
+  public ShopDTO register(@NonNull ShopDTO shopDTO) throws Exception {
+    return toDTO(shopRepo.save(toEntity(shopDTO)));
+  }
+
+  @Override
+  public ShopDTO update(@NonNull ShopDTO shopDTO) throws Exception {
+    return toDTO(shopRepo.save(toEntity(shopDTO)));
+  }
+
+  @Override
+  public void delete(@NonNull Long id) throws Exception {
+    shopRepo.deleteById(id);
+  }
+
+  public ShopDTO toDTO(Shop shop) {
+    return mapper.map(shop, ShopDTO.class);
+  }
+
+  public Shop toEntity(ShopDTO shopDTO) {
+    return mapper.map(shopDTO, Shop.class);
   }
 }

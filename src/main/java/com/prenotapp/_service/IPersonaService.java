@@ -1,5 +1,5 @@
 package com.prenotapp._service;
 
-import com.prenotapp._model.Persona;
+import com.prenotapp._dto.PersonaDTO;
 
-public interface IPersonaService extends ICRUD<Persona, Long> {}
+public interface IPersonaService extends ICRUD<PersonaDTO, Long> {}

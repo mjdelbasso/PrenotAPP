@@ -1,16 +1,9 @@
 package com.prenotapp._controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import com.prenotapp._dto.ShopDTO;
-import com.prenotapp._model.Shop;
 import com.prenotapp._service.IShopService;
-import com.prenotapp.exception.ModelNotFoundException;
 import java.util.List;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,37 +22,30 @@ public class ShopController {
   @Autowired
   private IShopService service;
 
-  @Autowired
-  private ModelMapper mapper;
-
   @GetMapping
   public ResponseEntity<List<ShopDTO>> list() throws Exception {
-    List<ShopDTO> lstShopDTO = service.listAllShops();
-    return new ResponseEntity<>((lstShopDTO), HttpStatus.OK);
+    return new ResponseEntity<>(service.list(), HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<ShopDTO> findById(@PathVariable("id") Long id)
     throws Exception {
-    return new ResponseEntity<>(toDTO(service.findById(id)), HttpStatus.OK);
+    return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
   }
 
   @PostMapping("/register")
   public ResponseEntity<ShopDTO> register(@RequestBody ShopDTO shopDTO)
     throws Exception {
-    Shop shop = service.register(toEntity(shopDTO));
-    return new ResponseEntity<>(toDTO(shop), HttpStatus.CREATED);
+    return new ResponseEntity<>(service.register(shopDTO), HttpStatus.CREATED);
   }
 
-  @PutMapping("/{id}")
+  @PutMapping("/update/{id}")
   public ResponseEntity<ShopDTO> update(
     @PathVariable("id") Long id,
     @RequestBody ShopDTO shopDTO
   ) throws Exception {
-    Shop shop = toEntity(shopDTO);
-    shop.setId(id);
-    shop = service.update(shop);
-    return new ResponseEntity<>(toDTO(shop), HttpStatus.OK);
+    shopDTO.setId(id);
+    return new ResponseEntity<>(service.update(shopDTO), HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")
@@ -67,20 +53,6 @@ public class ShopController {
     throws Exception {
     service.delete(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-  }
-
-  @SuppressWarnings("null")
-  @GetMapping("/hateoas/{id}")
-  public EntityModel<ShopDTO> findByIdHateoas(@PathVariable("id") Long id)
-    throws Exception {
-    Shop shop = service.findById(id);
-    if (shop == null) {
-      throw new ModelNotFoundException("Shop not found with ID: " + id);
-    }
-    ShopDTO shopDTO = mapper.map(shop, ShopDTO.class);
-    EntityModel<ShopDTO> model = EntityModel.of(shopDTO);
-    model.add(linkTo(methodOn(this.getClass()).list()).withRel("all-shops"));
-    return model;
   }
 
   @PostMapping("/new-category/{idShop}/{idCategory}")
@@ -101,13 +73,5 @@ public class ShopController {
   ) throws Exception {
     service.removeCategoryFromShop(idShop, idCategory);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-  }
-
-  public ShopDTO toDTO(Shop shop) {
-    return mapper.map(shop, ShopDTO.class);
-  }
-
-  public Shop toEntity(ShopDTO shopDTO) {
-    return mapper.map(shopDTO, Shop.class);
   }
 }

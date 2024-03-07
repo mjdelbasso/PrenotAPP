@@ -1,21 +1,23 @@
 package com.prenotapp._service.impl;
 
-import com.prenotapp._repo.IGenericRepo;
-import com.prenotapp._service.ICRUD;
 import java.util.List;
 
-@SuppressWarnings("null")
+import com.prenotapp._repo.IGenericRepo;
+import com.prenotapp._service.ICRUD;
+
+import lombok.NonNull;
+
 public abstract class CRUDImpl<T, ID> implements ICRUD<T, ID> {
 
   protected abstract IGenericRepo<T, ID> getRepo();
 
   @Override
-  public T register(T t) throws Exception {
+  public T register(@NonNull T t) throws Exception {
     return getRepo().save(t);
   }
 
   @Override
-  public T update(T t) throws Exception {
+  public T update(@NonNull T t) throws Exception {
     return getRepo().save(t);
   }
 
@@ -25,12 +27,12 @@ public abstract class CRUDImpl<T, ID> implements ICRUD<T, ID> {
   }
 
   @Override
-  public T findById(ID id) throws Exception {
+  public T findById(@NonNull ID id) throws Exception {
     return getRepo().findById(id).orElse(null);
   }
 
   @Override
-  public void delete(ID id) throws Exception {
+  public void delete(@NonNull ID id) throws Exception {
     getRepo().deleteById(id);
   }
 }
