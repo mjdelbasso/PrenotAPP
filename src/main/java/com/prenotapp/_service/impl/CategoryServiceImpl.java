@@ -15,7 +15,6 @@ import com.prenotapp._repo.ICategoryRepo;
 import com.prenotapp._service.ICategoryService;
 
 @Service
-@SuppressWarnings("null")
 public class CategoryServiceImpl implements ICategoryService {
 
   @Autowired

@@ -31,7 +31,6 @@ public class MessageConfig {
   }
 
   // Para resolver las variables en messages
-  @SuppressWarnings("null")
   @Bean
   public LocalValidatorFactoryBean getValidator() {
     LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();

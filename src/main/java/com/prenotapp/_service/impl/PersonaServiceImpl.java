@@ -17,7 +17,6 @@ import com.prenotapp._service.IPersonaService;
 import lombok.NonNull;
 
 @Service
-@SuppressWarnings("null")
 public class PersonaServiceImpl implements IPersonaService {
 
   @Autowired
